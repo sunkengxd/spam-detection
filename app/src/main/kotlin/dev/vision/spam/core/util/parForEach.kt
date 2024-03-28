@@ -1,14 +1,19 @@
 package dev.vision.spam.core.util
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlin.coroutines.CoroutineContext
 
-fun <E> Collection<E>.parForEach(
-    scope: CoroutineScope,
+suspend fun <T, R> Iterable<T>.parMap(
     context: CoroutineContext = Dispatchers.Default,
-    block: suspend (E) -> Unit
-) = this.forEach {
-    scope.launch(context) { block(it) }
-}
+    block: suspend (T) -> R
+): List<R> =
+    this.map {
+        coroutineScope {
+            async(context) {
+                block(it)
+            }
+        }
+    }.awaitAll()
