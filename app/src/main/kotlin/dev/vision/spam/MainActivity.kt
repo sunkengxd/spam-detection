@@ -19,9 +19,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.vision.spam.classifier.randomSpamClassifier
+import dev.vision.spam.core.cache.Cache
+import dev.vision.spam.core.client.client
 import dev.vision.spam.mailbox.api.MailtrapApi
-import dev.vision.spam.mailbox.api.client
 import dev.vision.spam.mailbox.repository.MailtrapEmailRepository
+import dev.vision.spam.mailbox.ui.AuthScreen
 import dev.vision.spam.mailbox.ui.MailboxScreen
 import dev.vision.spam.mailbox.viewmodel.MailboxViewModel
 import dev.vision.spam.ui.component.MainTopAppBar

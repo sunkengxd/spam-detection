@@ -1,4 +1,4 @@
-package dev.vision.spam
+package dev.vision.spam.core.cache
 
 import android.content.Context
 import androidx.core.content.edit

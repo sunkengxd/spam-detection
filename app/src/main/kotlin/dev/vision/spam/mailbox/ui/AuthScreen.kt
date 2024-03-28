@@ -1,4 +1,4 @@
-package dev.vision.spam
+package dev.vision.spam.mailbox.ui
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -41,6 +41,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.vision.spam.core.cache.Cache
 
 @Composable
 fun AuthScreen(onLogin: () -> Unit, cache: Cache) {

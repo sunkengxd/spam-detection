@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+
+
 class MailboxViewModel(
     private val repository: EmailRepository,
     private val classifier: SpamClassifier

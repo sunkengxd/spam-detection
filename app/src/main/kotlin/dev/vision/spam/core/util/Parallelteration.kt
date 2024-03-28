@@ -4,6 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 suspend fun <T, R> Iterable<T>.parMap(
@@ -17,3 +18,15 @@ suspend fun <T, R> Iterable<T>.parMap(
             }
         }
     }.awaitAll()
+
+suspend fun <T, R> Iterable<T>.parForEach(
+    context: CoroutineContext = Dispatchers.Default,
+    block: suspend (T) -> R
+) =
+    this.forEach {
+        coroutineScope {
+            launch(context) {
+                block(it)
+            }
+        }
+    }
