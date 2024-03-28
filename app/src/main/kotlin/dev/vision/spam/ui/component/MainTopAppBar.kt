@@ -3,6 +3,7 @@ package dev.vision.spam.ui.component
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Sort
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,7 +24,7 @@ import dev.vision.spam.mailbox.viewmodel.title
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainTopAppBar(onClickSort: (EmailSort) -> Unit) {
+fun MainTopAppBar(onClickSort: (EmailSort) -> Unit, onClickRefresh: () -> Unit) {
     var openDropDown by remember {
         mutableStateOf(false)
     }
@@ -36,7 +37,7 @@ fun MainTopAppBar(onClickSort: (EmailSort) -> Unit) {
         },
         actions = {
             IconButton(onClick = { openDropDown = !openDropDown }) {
-                Icon(Icons.AutoMirrored.Rounded.Sort, "Sort")
+                Icon(Icons.AutoMirrored.Rounded.Sort, null)
             }
 
             DropdownMenu(
@@ -51,6 +52,10 @@ fun MainTopAppBar(onClickSort: (EmailSort) -> Unit) {
                         onClick = { onClickSort(sort) }
                     )
                 }
+            }
+
+            IconButton(onClick = onClickRefresh) {
+                Icon(Icons.Rounded.Refresh, null)
             }
         }
     )
