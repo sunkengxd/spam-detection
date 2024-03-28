@@ -20,7 +20,7 @@ import dev.vision.spam.mailbox.viewmodel.MailboxState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun EmailList(state: MailboxState, modifier: Modifier = Modifier) {
+fun MessageList(state: MailboxState, modifier: Modifier = Modifier) {
     LazyColumn(
         verticalArrangement = spacedBy(10.dp),
         modifier = modifier
@@ -29,17 +29,18 @@ fun EmailList(state: MailboxState, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(5.dp))
         }
         items(
-            state.emails,
-            key = { it.topic }
+            state.messages,
+            key = { it.subject }
         ) { email ->
-            EmailItem(
-                email = email,
+            MessageItem(
+                message = email,
                 classification = when (email) {
                     in state.spam -> SpamClassification.Spam
                     in state.ham -> SpamClassification.Ham
                     else -> null
                 },
                 modifier = Modifier
+                    .animateItemPlacement()
                     .shadow(5.dp, shapes.extraSmall)
                     .fillMaxWidth()
                     .wrapContentHeight()
@@ -47,7 +48,6 @@ fun EmailList(state: MailboxState, modifier: Modifier = Modifier) {
                         colorScheme.surfaceContainer,
                         shapes.extraSmall
                     )
-                    .animateItemPlacement()
             )
         }
         item {
