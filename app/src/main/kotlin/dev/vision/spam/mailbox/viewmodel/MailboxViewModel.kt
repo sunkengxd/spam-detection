@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.vision.spam.classifier.SpamClassification
 import dev.vision.spam.classifier.SpamClassifier
-import dev.vision.spam.mailbox.repository.EmailRepository
 import dev.vision.spam.core.util.parForEach
+import dev.vision.spam.mailbox.model.Message
+import dev.vision.spam.mailbox.repository.EmailRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -22,11 +23,15 @@ class MailboxViewModel(
 
     private inline fun update(block: MailboxState.() -> MailboxState) = mutableState.update(block)
 
+    init {
+        load()
+    }
+
     fun sort(by: EmailSort) = viewModelScope.launch {
         update {
             copy(
-                emails = when (by) {
-                    EmailSort.AtoZ -> emails.sortedBy { it.topic }
+                messages = when (by) {
+                    EmailSort.AtoZ -> messages.sortedBy { it.subject }
                     EmailSort.SpamFirst -> (spam + ham).toList()
                     EmailSort.HamFirst -> (ham + spam).toList()
                 }
@@ -35,18 +40,33 @@ class MailboxViewModel(
     }
 
     fun load() = viewModelScope.launch {
-        val emails = repository.fetch()
+        update { copy(loading = true) }
+        val inboxes = repository.inboxes()
         update {
-            copy(emails = emails)
+            copy(
+                inboxes = inboxes,
+                messages = emptyList(),
+                spam = emptySet(),
+                ham = emptySet()
+            )
         }
-        emails.parForEach(viewModelScope) { email ->
-            val result = classifier.check(email.content)
+        inboxes.parForEach { inbox ->
+            val messages = repository.messages(inbox)
             update {
-                if (result == SpamClassification.Ham) {
-                    copy(ham = ham + email)
-                } else {
-                    copy(spam = spam + email)
-                }
+                copy(messages = messages)
+            }
+            messages.forEach(::processMessage)
+        }
+        update { copy(loading = false) }
+    }
+
+    private fun processMessage(message: Message) = viewModelScope.launch {
+        val result = classifier.check(message.body)
+        update {
+            if (result == SpamClassification.Ham) {
+                copy(ham = ham + message)
+            } else {
+                copy(spam = spam + message)
             }
         }
     }
