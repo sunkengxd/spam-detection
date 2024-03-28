@@ -1,8 +1,10 @@
 package dev.vision.spam.mailbox.repository
 
-import dev.vision.spam.mailbox.model.Email
+import dev.vision.spam.mailbox.model.Inbox
+import dev.vision.spam.mailbox.model.Message
 
 interface EmailRepository {
 
-    suspend fun fetch(): List<Email>
+    suspend fun inboxes(): List<Inbox>
+    suspend fun messages(inbox: Inbox): List<Message>
 }
