@@ -30,7 +30,7 @@ fun MessageList(state: MailboxState, modifier: Modifier = Modifier) {
         }
         items(
             state.messages,
-            key = { it.subject }
+            key = { it.id }
         ) { email ->
             MessageItem(
                 message = email,

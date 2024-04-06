@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.vision.spam.classifier.SpamClassification
 import dev.vision.spam.classifier.SpamClassifier
-import dev.vision.spam.core.util.parForEach
+import dev.vision.spam.core.util.suspendForEach
 import dev.vision.spam.mailbox.model.Message
 import dev.vision.spam.mailbox.repository.EmailRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,7 +52,7 @@ class MailboxViewModel(
                 ham = emptySet()
             )
         }
-        inboxes.parForEach { inbox ->
+        inboxes.suspendForEach { inbox ->
             val messages = repository.messages(inbox)
             update {
                 copy(messages = messages)

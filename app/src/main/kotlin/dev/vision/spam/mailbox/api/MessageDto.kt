@@ -74,6 +74,7 @@ class MessageDto(
 }
 
 fun MessageDto.toDomain(body: String) = Message(
+    id = id,
     from = User(
         address = fromEmail,
         name = fromName

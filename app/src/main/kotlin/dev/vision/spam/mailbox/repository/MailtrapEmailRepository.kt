@@ -1,6 +1,6 @@
 package dev.vision.spam.mailbox.repository
 
-import dev.vision.spam.core.util.parMap
+import dev.vision.spam.core.util.suspendMap
 import dev.vision.spam.mailbox.api.AccountDto
 import dev.vision.spam.mailbox.api.InboxDto
 import dev.vision.spam.mailbox.api.MailtrapApi
@@ -32,7 +32,7 @@ class MailtrapEmailRepository(
     override suspend fun messages(inbox: Inbox): List<Message> = withContext(Dispatchers.IO) {
         val account = (self.accounts ?: api.accounts()).first() // ensure accounts loaded
         val messages = api.messages(account.id, inbox.id) // fetch messages for first account
-        messages.parMap { message ->
+        messages.suspendMap { message ->
             api.body(account.id, inbox.id, message.id) // load bodies for each message in parallel
         }
             .zip(messages) // create Pair<String, MessageDto> for each message and it's body
