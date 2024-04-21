@@ -24,7 +24,7 @@ class MailtrapEmailRepository(
     override suspend fun inboxes(): List<Inbox> = withContext(Dispatchers.IO) {
         inboxes ?: (accounts ?: api.accounts()) // return inboxes if cached, otherwise get accounts
             .first() // fetch for first account
-            .let { api.inboxes(it.id) } // do the fetch
+            .let { account -> api.inboxes(account.id) } // do the fetch
             .map(InboxDto::toDomain) // transform each InboxDto to Inbox
             .also { this@MailtrapEmailRepository.inboxes = it } // also cache inboxes
     }
@@ -37,7 +37,7 @@ class MailtrapEmailRepository(
         }
             .zip(messages) // create Pair<String, MessageDto> for each message and it's body
             .map { (body, message) ->
-                message.toDomain(body) // transform Pair<String, MessageDto> to Message
+                message.toDomain(body.trim()) // transform Pair<String, MessageDto> to Message
             }
     }
 }

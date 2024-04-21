@@ -32,13 +32,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
-import dev.vision.spam.classifier.SpamClassification
+import dev.vision.spam.classifier.Classification
+import dev.vision.spam.classifier.Ham
+import dev.vision.spam.classifier.Spam
 import dev.vision.spam.mailbox.model.Message
 
 @Composable
 fun MessageItem(
     message: Message,
-    classification: SpamClassification?,
+    classification: Classification?,
     modifier: Modifier = Modifier
 ) {
     var showBody by remember {
@@ -62,13 +64,13 @@ fun MessageItem(
                         strokeWidth = 2.dp
                     )
 
-                    SpamClassification.Spam -> Icon(
+                    is Spam -> Icon(
                         Icons.Rounded.Clear,
                         contentDescription = "This message is spam",
                         tint = MaterialTheme.colorScheme.error
                     )
 
-                    SpamClassification.Ham -> Icon(
+                    is Ham -> Icon(
                         Icons.Rounded.Check,
                         contentDescription = "This message is not spam",
                         tint = MaterialTheme.colorScheme.secondary
@@ -101,6 +103,15 @@ fun MessageItem(
             Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
                 HorizontalDivider()
                 Text(message.body, style = MaterialTheme.typography.bodyMedium)
+                classification?.probability?.let {
+                    val text = "%.2f".format(it * 100) + "%"
+                    Text(
+                        text,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.outline,
+                        modifier = Modifier.align(Alignment.End)
+                    )
+                }
             }
         }
     }

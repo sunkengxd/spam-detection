@@ -15,7 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
-import dev.vision.spam.classifier.SpamClassification
+import dev.vision.spam.classifier.Ham
+import dev.vision.spam.classifier.Spam
 import dev.vision.spam.mailbox.viewmodel.MailboxState
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -31,12 +32,12 @@ fun MessageList(state: MailboxState, modifier: Modifier = Modifier) {
         items(
             state.messages,
             key = { it.id }
-        ) { email ->
+        ) { message ->
             MessageItem(
-                message = email,
-                classification = when (email) {
-                    in state.spam -> SpamClassification.Spam
-                    in state.ham -> SpamClassification.Ham
+                message = message,
+                classification = when (message) {
+                    in state.spam.keys -> Spam(state.spam[message]!!)
+                    in state.ham.keys -> Ham(state.ham[message]!!)
                     else -> null
                 },
                 modifier = Modifier

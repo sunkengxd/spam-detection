@@ -15,10 +15,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import dev.vision.spam.classifier.randomSpamClassifier
+import dev.vision.spam.classifier.Classifier
+import dev.vision.spam.classifier.Ham
+import dev.vision.spam.classifier.Spam
+import dev.vision.spam.classifier.nlSpamClassifier
 import dev.vision.spam.core.cache.Cache
 import dev.vision.spam.core.client.client
 import dev.vision.spam.mailbox.api.MailtrapApi
@@ -28,6 +32,7 @@ import dev.vision.spam.mailbox.ui.MailboxScreen
 import dev.vision.spam.mailbox.viewmodel.MailboxViewModel
 import dev.vision.spam.ui.component.MainTopAppBar
 import dev.vision.spam.ui.theme.SpamTheme
+import org.tensorflow.lite.task.text.nlclassifier.NLClassifier
 
 class MainActivity : ComponentActivity() {
 
@@ -39,9 +44,13 @@ class MainActivity : ComponentActivity() {
         client(cache)
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splash = installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        var keepSplash = true
+        splash.setKeepOnScreenCondition { keepSplash }
         setContent {
             var apiKey: String? by remember {
                 mutableStateOf(null)
@@ -49,6 +58,7 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(Unit) {
                 apiKey = cache.getKey()
+                keepSplash = false
             }
 
             val loggedIn = remember(apiKey) {
@@ -62,7 +72,8 @@ class MainActivity : ComponentActivity() {
                                 initializer {
                                     MailboxViewModel(
                                         repository = MailtrapEmailRepository(MailtrapApi(client)),
-                                        classifier = randomSpamClassifier
+//                                        classifier = { listOf(Spam(0f), Ham(1f)).random() }
+                                        classifier = nlSpamClassifier(NLClassifier.createFromFile(this@MainActivity, "model_spam.tflite"))
                                     )
                                 }
                             }
@@ -87,3 +98,5 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+//1b86f87cf027d3d3d6e1af6cc329b3b5

@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.AaptOptions
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -24,6 +26,10 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+
+    androidResources {
+        noCompress += "tflite"
     }
 
     val java = libs.versions.java.get()
@@ -54,6 +60,7 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.activity.compose)
+    implementation(libs.splashscreen)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.ui.graphics)
@@ -64,4 +71,10 @@ dependencies {
     implementation(libs.bundles.ktor.client)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+
+    implementation(libs.tensorflow.lite)
+
+    implementation(libs.tensorflow.lite.task.text)
+    implementation(libs.tensorflow.lite.gpu.delegate.plugin)
+//    implementation("org.tensorflow:tensorflow-lite-gpu:2.16.1")
 }

@@ -10,6 +10,6 @@ data class MailboxState(
     val loading: Boolean = false,
     val inboxes: List<Inbox> = emptyList(),
     val messages: List<Message> = emptyList(),
-    val spam: Set<Message> = emptySet(),
-    val ham: Set<Message> = emptySet(),
+    val spam: Map<Message, Float> = emptyMap(),
+    val ham: Map<Message, Float> = emptyMap(),
 )
