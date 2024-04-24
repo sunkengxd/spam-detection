@@ -63,7 +63,7 @@ class MailboxViewModel(
     }
 
     private fun processMessage(message: Message) = viewModelScope.launch {
-        val result = classifier.check(message.body)
+        val result = classifier.check(message.subject + " " + message.body)
         update {
             if (result is Ham) {
                 copy(ham = ham.toMutableMap().apply { this[message] = result.probability })

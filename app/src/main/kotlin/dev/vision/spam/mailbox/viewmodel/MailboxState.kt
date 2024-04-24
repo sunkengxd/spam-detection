@@ -1,7 +1,6 @@
 package dev.vision.spam.mailbox.viewmodel
 
 import androidx.compose.runtime.Immutable
-import dev.vision.spam.mailbox.model.Email
 import dev.vision.spam.mailbox.model.Inbox
 import dev.vision.spam.mailbox.model.Message
 

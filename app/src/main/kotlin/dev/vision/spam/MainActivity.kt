@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                                     MailboxViewModel(
                                         repository = MailtrapEmailRepository(MailtrapApi(client)),
 //                                        classifier = { listOf(Spam(0f), Ham(1f)).random() }
-                                        classifier = nlSpamClassifier(NLClassifier.createFromFile(this@MainActivity, "model_spam.tflite"))
+                                        classifier = nlSpamClassifier(NLClassifier.createFromFile(this@MainActivity, "model.tflite"))
                                     )
                                 }
                             }

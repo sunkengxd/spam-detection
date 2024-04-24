@@ -18,19 +18,16 @@ class MailtrapEmailRepository(
     private var accounts: List<AccountDto>? = null
     private var inboxes: List<Inbox>? = null
 
-    // to not have to this@MaintralEmailRepository
-    private val self = this
-
     override suspend fun inboxes(): List<Inbox> = withContext(Dispatchers.IO) {
         inboxes ?: (accounts ?: api.accounts()) // return inboxes if cached, otherwise get accounts
             .first() // fetch for first account
             .let { account -> api.inboxes(account.id) } // do the fetch
             .map(InboxDto::toDomain) // transform each InboxDto to Inbox
-            .also { this@MailtrapEmailRepository.inboxes = it } // also cache inboxes
+            .also { inboxes = it } // also cache inboxes
     }
 
     override suspend fun messages(inbox: Inbox): List<Message> = withContext(Dispatchers.IO) {
-        val account = (self.accounts ?: api.accounts()).first() // ensure accounts loaded
+        val account = (accounts ?: api.accounts()).first() // ensure accounts loaded
         val messages = api.messages(account.id, inbox.id) // fetch messages for first account
         messages.suspendMap { message ->
             api.body(account.id, inbox.id, message.id) // load bodies for each message in parallel
