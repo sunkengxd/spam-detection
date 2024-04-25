@@ -36,7 +36,7 @@ fun client(cache: Cache) = HttpClient {
     }
 
     install(Logging) {
-        logger = object: Logger {
+        logger = object : Logger {
             override fun log(message: String) {
                 Log.d("mailtrap", message)
             }

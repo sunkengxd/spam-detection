@@ -19,9 +19,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import dev.vision.spam.classifier.Classifier
-import dev.vision.spam.classifier.Ham
-import dev.vision.spam.classifier.Spam
 import dev.vision.spam.classifier.nlSpamClassifier
 import dev.vision.spam.core.cache.Cache
 import dev.vision.spam.core.client.client
@@ -43,7 +40,6 @@ class MainActivity : ComponentActivity() {
     private val client by lazy {
         client(cache)
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splash = installSplashScreen()
@@ -72,8 +68,12 @@ class MainActivity : ComponentActivity() {
                                 initializer {
                                     MailboxViewModel(
                                         repository = MailtrapEmailRepository(MailtrapApi(client)),
-//                                        classifier = { listOf(Spam(0f), Ham(1f)).random() }
-                                        classifier = nlSpamClassifier(NLClassifier.createFromFile(this@MainActivity, "model.tflite"))
+                                        classifier = nlSpamClassifier(
+                                            NLClassifier.createFromFile(
+                                                this@MainActivity,
+                                                "model.tflite"
+                                            )
+                                        )
                                     )
                                 }
                             }

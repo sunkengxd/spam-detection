@@ -1,6 +1,5 @@
 package dev.vision.spam.mailbox.api
 
-
 import dev.vision.spam.mailbox.model.Message
 import dev.vision.spam.mailbox.model.User
 import kotlinx.serialization.SerialName
@@ -51,6 +50,7 @@ class MessageDto(
     @SerialName("smtp_information")
     val smtpInformation: SmtpInformation
 ) {
+
     @Serializable
     class BlacklistsReportInfo(
         val result: String,
@@ -58,6 +58,7 @@ class MessageDto(
         val ip: String,
         val report: List<Report>
     ) {
+
         @Serializable
         class Report(
             val name: String,

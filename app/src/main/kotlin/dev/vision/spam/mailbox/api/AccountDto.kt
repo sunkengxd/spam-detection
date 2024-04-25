@@ -1,6 +1,5 @@
 package dev.vision.spam.mailbox.api
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
