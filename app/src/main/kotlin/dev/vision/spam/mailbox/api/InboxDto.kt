@@ -4,6 +4,7 @@ import dev.vision.spam.mailbox.model.Inbox
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Suppress("Unused")
 @Serializable
 class InboxDto(
     val id: Long,

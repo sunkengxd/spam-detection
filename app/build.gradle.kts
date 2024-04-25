@@ -1,5 +1,3 @@
-import com.android.build.api.dsl.AaptOptions
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -22,8 +20,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -61,20 +58,20 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.activity.compose)
     implementation(libs.splashscreen)
+
+    implementation(libs.tensorflow.lite)
+    implementation(libs.tensorflow.lite.task.text)
+    implementation(libs.tensorflow.lite.gpu.delegate.plugin)
+
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
     implementation(libs.material.icons)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.bundles.ktor.client)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
-    implementation(libs.tensorflow.lite)
-
-    implementation(libs.tensorflow.lite.task.text)
-    implementation(libs.tensorflow.lite.gpu.delegate.plugin)
-//    implementation("org.tensorflow:tensorflow-lite-gpu:2.16.1")
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.bundles.ktor.client)
 }
