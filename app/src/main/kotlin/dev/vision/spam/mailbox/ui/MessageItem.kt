@@ -79,7 +79,7 @@ fun MessageItem(
             }
 
             Column {
-                Text(message.subject, style = MaterialTheme.typography.bodyLarge)
+                Text(message.subject, style = MaterialTheme.typography.bodyLarge, maxLines = 1)
                 Text(
                     message.from.address,
                     style = MaterialTheme.typography.bodySmall,
